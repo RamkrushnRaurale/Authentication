@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/Authentication/static/css/main.029021f5.css",
-    "main.js": "/Authentication/static/js/main.783f0e11.js",
+    "main.js": "/Authentication/static/js/main.94dbf0ef.js",
     "static/js/453.96453769.chunk.js": "/Authentication/static/js/453.96453769.chunk.js",
     "static/media/bootstrap-icons.woff?": "/Authentication/static/media/bootstrap-icons.1295669cd4e305c97f2c.woff",
     "static/media/bootstrap-icons.woff2?": "/Authentication/static/media/bootstrap-icons.92ea18a81d737146ff04.woff2",
@@ -16,11 +16,11 @@
     "static/media/circleContact.jpg": "/Authentication/static/media/circleContact.e375b4d8bd564373443b.jpg",
     "index.html": "/Authentication/index.html",
     "main.029021f5.css.map": "/Authentication/static/css/main.029021f5.css.map",
-    "main.783f0e11.js.map": "/Authentication/static/js/main.783f0e11.js.map",
+    "main.94dbf0ef.js.map": "/Authentication/static/js/main.94dbf0ef.js.map",
     "453.96453769.chunk.js.map": "/Authentication/static/js/453.96453769.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.029021f5.css",
-    "static/js/main.783f0e11.js"
+    "static/js/main.94dbf0ef.js"
   ]
 }
