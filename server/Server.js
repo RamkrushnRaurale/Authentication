@@ -1,3 +1,4 @@
+require("dotenv").config();
 
 const express = require("express");
 const cors = require("cors");
@@ -8,39 +9,70 @@ const nodemailer = require("nodemailer");
 
 const app = express();
 
+
+// ================= MIDDLEWARE =================
+
 app.use(cors());
 app.use(express.json());
+
+
+// ================= TEST ROUTE =================
+
+app.get("/", (req, res) => {
+
+    res.send("✅ Backend Running");
+
+});
 
 
 // ================= MYSQL CONNECTION =================
 
 const db = mysql.createConnection({
+
     host: "localhost",
     user: "root",
     password: "Rama@1998",
     database: "auth_db",
+
 });
 
 db.connect((err) => {
 
     if (err) {
-        console.log("❌ MYSQL ERROR:", err);
-    } else {
-        console.log("✅ MYSQL CONNECTED");
-    }
 
+        console.log("❌ MYSQL ERROR:", err);
+
+    } else {
+
+        console.log("✅ MYSQL CONNECTED");
+
+    }
 });
 
 
-// ================= EMAIL CONFIG =================
+// ================= CHECK ENV =================
+
+console.log("EMAIL USER:", process.env.EMAIL_USER);
+console.log("EMAIL PASS:", process.env.EMAIL_PASS);
+
+
+// ================= NODEMAILER =================
 
 const transporter = nodemailer.createTransport({
 
     service: "gmail",
 
     auth: {
-        user: "YOUR_GMAIL@gmail.com",
-        pass: "YOUR_16_DIGIT_APP_PASSWORD",
+
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+
+    },
+
+    tls: {
+
+        rejectUnauthorized: false,
+
     },
 });
 
@@ -49,55 +81,93 @@ const transporter = nodemailer.createTransport({
 
 app.post("/signup", async (req, res) => {
 
-    const {
-        username,
-        email,
-        password
-    } = req.body;
+    try {
 
-    const hashedPassword =
-        await bcrypt.hash(password, 10);
+        const {
+            username,
+            email,
+            password
+        } = req.body;
 
-    const checkSql =
-        "SELECT * FROM users WHERE email=?";
-
-    db.query(checkSql, [email], (err, result) => {
-
-        if (err) {
-            return res.status(500).json(err);
-        }
-
-        if (result.length > 0) {
+        if (!username || !email || !password) {
 
             return res.status(400).json({
-                message: "Email already exists",
-            });
 
+                message: "All fields are required",
+
+            });
         }
 
-        const sql =
-            "INSERT INTO users(username,email,password) VALUES(?,?,?)";
+        const checkSql =
+            "SELECT * FROM users WHERE email=?";
 
-        db.query(
-            sql,
-            [
-                username,
-                email,
-                hashedPassword
-            ],
-            (err, result) => {
+        db.query(checkSql, [email], async (err, result) => {
 
-                if (err) {
-                    return res.status(500).json(err);
-                }
+            if (err) {
 
-                res.json({
-                    message: "Signup Successful",
+                console.log(err);
+
+                return res.status(500).json({
+
+                    message: "Database Error",
+
                 });
-
             }
-        );
-    });
+
+            if (result.length > 0) {
+
+                return res.status(400).json({
+
+                    message: "Email already exists",
+
+                });
+            }
+
+            const hashedPassword =
+                await bcrypt.hash(password, 10);
+
+            const sql =
+                "INSERT INTO users(username,email,password) VALUES(?,?,?)";
+
+            db.query(
+                sql,
+                [
+                    username,
+                    email,
+                    hashedPassword
+                ],
+                (err, result) => {
+
+                    if (err) {
+
+                        console.log(err);
+
+                        return res.status(500).json({
+
+                            message: "Signup Failed",
+
+                        });
+                    }
+
+                    res.status(200).json({
+
+                        message: "Signup Successful",
+
+                    });
+                }
+            );
+        });
+
+    } catch (error) {
+
+        console.log(error);
+
+        res.status(500).json({
+
+            message: "Server Error",
+
+        });
+    }
 });
 
 
@@ -105,58 +175,91 @@ app.post("/signup", async (req, res) => {
 
 app.post("/login", (req, res) => {
 
-    const { email, password } = req.body;
+    try {
 
-    const sql =
-        "SELECT * FROM users WHERE email=?";
+        const { email, password } = req.body;
 
-    db.query(sql, [email], async (err, result) => {
+        if (!email || !password) {
 
-        if (err) {
-            return res.status(500).json(err);
-        }
+            return res.status(400).json({
 
-        if (result.length === 0) {
+                message: "All fields are required",
 
-            return res.status(404).json({
-                message: "User not found",
             });
-
         }
 
-        const user = result[0];
+        const sql =
+            "SELECT * FROM users WHERE email=?";
 
-        const match =
-            await bcrypt.compare(
-                password,
-                user.password
+        db.query(sql, [email], async (err, result) => {
+
+            if (err) {
+
+                console.log(err);
+
+                return res.status(500).json({
+
+                    message: "Database Error",
+
+                });
+            }
+
+            if (result.length === 0) {
+
+                return res.status(404).json({
+
+                    message: "User not found",
+
+                });
+            }
+
+            const user = result[0];
+
+            const match =
+                await bcrypt.compare(
+                    password,
+                    user.password
+                );
+
+            if (!match) {
+
+                return res.status(401).json({
+
+                    message: "Wrong Password",
+
+                });
+            }
+
+            const token = jwt.sign(
+                {
+                    id: user.id,
+                    email: user.email,
+                },
+                "secretkey",
+                {
+                    expiresIn: "1d",
+                }
             );
 
-        if (!match) {
+            res.status(200).json({
 
-            return res.status(401).json({
-                message: "Wrong Password",
+                token,
+                user,
+                message: "Login Successful",
+
             });
-
-        }
-
-        const token = jwt.sign(
-            {
-                id: user.id,
-                email: user.email,
-            },
-            "secretkey",
-            {
-                expiresIn: "1d",
-            }
-        );
-
-        res.json({
-            token,
-            user,
         });
 
-    });
+    } catch (error) {
+
+        console.log(error);
+
+        res.status(500).json({
+
+            message: "Server Error",
+
+        });
+    }
 });
 
 
@@ -164,33 +267,45 @@ app.post("/login", (req, res) => {
 
 app.post("/forgot-password", (req, res) => {
 
-    const { email } = req.body;
+    try {
 
-    console.log("📧 EMAIL:", email);
+        const { email } = req.body;
 
-    const sql =
-        "SELECT * FROM users WHERE email=?";
+        console.log("📧 EMAIL:", email);
 
-    db.query(sql, [email], (err, result) => {
+        if (!email) {
 
-        if (err) {
+            return res.status(400).json({
 
-            console.log(err);
+                message: "Email is required",
 
-            return res.status(500).json({
-                message: "Database Error",
             });
         }
 
-        if (result.length === 0) {
+        const sql =
+            "SELECT * FROM users WHERE email=?";
 
-            return res.status(404).json({
-                message: "Email Not Found",
-            });
+        db.query(sql, [email], (err, result) => {
 
-        }
+            if (err) {
 
-        try {
+                console.log("DATABASE ERROR:", err);
+
+                return res.status(500).json({
+
+                    message: "Database Error",
+
+                });
+            }
+
+            if (result.length === 0) {
+
+                return res.status(404).json({
+
+                    message: "Email Not Found",
+
+                });
+            }
 
             const token = jwt.sign(
                 { email },
@@ -198,20 +313,21 @@ app.post("/forgot-password", (req, res) => {
                 { expiresIn: "15m" }
             );
 
+            // IMPORTANT FIX
             const resetLink =
-                `http://localhost:3000/reset-password/${token}`;
+                `http://localhost:3000/Authentication/reset-password/${token}`;
 
-console.log("RESET LINK:", resetLink);
+            console.log("RESET LINK:", resetLink);
 
-const mailOptions = {
+            const mailOptions = {
 
-    from: "YOUR_GMAIL@gmail.com",
+                from: process.env.EMAIL_USER,
 
-    to: email,
+                to: email,
 
-    subject: "Reset Password",
+                subject: "Reset Password",
 
-    html: `
+                html: `
                     <h2>Password Reset</h2>
 
                     <p>
@@ -222,45 +338,48 @@ const mailOptions = {
                         Reset Password
                     </a>
                 `,
-};
+            };
 
-transporter.sendMail(
-    mailOptions,
-    (error, info) => {
+            transporter.sendMail(
+                mailOptions,
+                (error, info) => {
 
-        if (error) {
+                    if (error) {
 
-            console.log(
-                "MAIL ERROR:",
-                error
+                        console.log(
+                            "❌ MAIL ERROR:",
+                            error.message
+                        );
+
+                        return res.status(500).json({
+
+                            message: "Email Send Failed",
+
+                        });
+                    }
+
+                    console.log("✅ EMAIL SENT");
+
+                    res.status(200).json({
+
+                        message:
+                            "Reset password link sent successfully",
+
+                    });
+                }
             );
+        });
 
-            return res.status(500).json({
-                message:
-                    "Email Send Failed",
-            });
-        }
+    } catch (error) {
 
-        console.log(
-            "✅ EMAIL SENT"
-        );
+        console.log(error);
 
-        res.json({
-            message:
-                "Reset password link sent successfully",
+        res.status(500).json({
+
+            message: "Server Error",
+
         });
     }
-);
-
-        } catch (error) {
-
-    console.log(error);
-
-    res.status(500).json({
-        message: "Server Error",
-    });
-}
-    });
 });
 
 
@@ -270,53 +389,81 @@ app.post(
     "/reset-password/:token",
     async (req, res) => {
 
-        const { token } = req.params;
+        try {
 
-        const { password } = req.body;
+            const { token } = req.params;
 
-        jwt.verify(
-            token,
-            "resetSecretKey",
-            async (err, decoded) => {
+            const { password } = req.body;
 
-                if (err) {
+            if (!password) {
 
-                    return res.status(401).json({
-                        message:
-                            "Invalid Token",
-                    });
+                return res.status(400).json({
 
-                }
+                    message: "Password is required",
 
-                const hashedPassword =
-                    await bcrypt.hash(password, 10);
-
-                const sql =
-                    "UPDATE users SET password=? WHERE email=?";
-
-                db.query(
-                    sql,
-                    [
-                        hashedPassword,
-                        decoded.email,
-                    ],
-                    (err, result) => {
-
-                        if (err) {
-
-                            return res.status(500).json(err);
-
-                        }
-
-                        res.json({
-                            message:
-                                "Password Reset Successful",
-                        });
-
-                    }
-                );
+                });
             }
-        );
+
+            jwt.verify(
+                token,
+                "resetSecretKey",
+                async (err, decoded) => {
+
+                    if (err) {
+
+                        return res.status(401).json({
+
+                            message: "Invalid or Expired Token",
+
+                        });
+                    }
+
+                    const hashedPassword =
+                        await bcrypt.hash(password, 10);
+
+                    const sql =
+                        "UPDATE users SET password=? WHERE email=?";
+
+                    db.query(
+                        sql,
+                        [
+                            hashedPassword,
+                            decoded.email,
+                        ],
+                        (err, result) => {
+
+                            if (err) {
+
+                                console.log(err);
+
+                                return res.status(500).json({
+
+                                    message: "Password Reset Failed",
+
+                                });
+                            }
+
+                            res.status(200).json({
+
+                                message:
+                                    "Password Reset Successful",
+
+                            });
+                        }
+                    );
+                }
+            );
+
+        } catch (error) {
+
+            console.log(error);
+
+            res.status(500).json({
+
+                message: "Server Error",
+
+            });
+        }
     }
 );
 

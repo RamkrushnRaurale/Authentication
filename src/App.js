@@ -1,54 +1,132 @@
-// import logo from './logo.svg';
-import React from 'react';
-import './App.css';
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
-// import Navbar from './components/Navbar';
-import SignUp from './components/SignUp/SignUp';
-import SignIn from './components/SignIn/SignIn';
-import TextArea from './components/Dashboard/TextArea';
-import Dashboard from './components/Dashboard/Dashboard';
-import Products from './components/Products/Products';
-import Home from './components/Dashboard/sidebarComp/Home';
-import { AuthProvider, useAuth } from "./components/SignIn/AuthContext";
+import React from "react";
+import "./App.css";
+
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+
+import SignUp from "./components/SignUp/SignUp";
+import SignIn from "./components/SignIn/SignIn";
 import ForgotPassword from "./components/SignIn/ForgotPassword";
+import ResetPassword from "./components/SignIn/ResetPassword";
+
+import Dashboard from "./components/Dashboard/Dashboard";
+import TextArea from "./components/Dashboard/TextArea";
+import Products from "./components/Products/Products";
+import Home from "./components/Dashboard/sidebarComp/Home";
+
+import {
+  AuthProvider,
+  useAuth,
+} from "./components/SignIn/AuthContext";
+
+
+// ================= PRIVATE ROUTE =================
+
 const PrivateRoute = ({ children }) => {
+
   const { user } = useAuth();
 
-  return user ? children : <Navigate to="/SignIn" />;
+  return user
+    ? children
+    : <Navigate to="/SignIn" />;
 };
 
+
+// ================= APP =================
+
 function App() {
+
   return (
-    <>
 
-      <AuthProvider>
-        <BrowserRouter basename="/Authentication">
-          <Routes>
-            <Route path="/SignIn" element={<SignIn />} />
+    <AuthProvider>
 
-            <Route
-              path="/Dashboard"
-              element={
-                <PrivateRoute>
-                  <Dashboard />
-                </PrivateRoute>
-              }
-            />
+      <BrowserRouter basename="/Authentication">
 
-            <Route path="*" element={<Navigate to="/SignIn" />} />
-            <Route path="/" element={<SignIn />} />
-            <Route exact path='/SignUP' element={<SignUp />} />
-            <Route path='/SignIn' element={<SignIn />} />
-            <Route path='/TextArea' element={<TextArea />} />
-            <Route path='/Dashboard' element={<Dashboard />} />
-            <Route path='/Products' element={<Products />} />
-            <Route path='/Home' element={<Home />} />
-            <Route path="/ForgotPassword" element={<ForgotPassword />} />
-          </Routes>
-        </BrowserRouter>
-      </AuthProvider>
+        <Routes>
 
-    </>
+          {/* ================= PUBLIC ROUTES ================= */}
+
+          <Route
+            path="/"
+            element={<Navigate to="/SignIn" />}
+          />
+
+          <Route
+            path="/SignIn"
+            element={<SignIn />}
+          />
+
+          <Route
+            path="/SignUp"
+            element={<SignUp />}
+          />
+
+          <Route
+            path="/ForgotPassword"
+            element={<ForgotPassword />}
+          />
+
+          <Route
+            path="/reset-password/:token"
+            element={<ResetPassword />}
+          />
+
+
+          {/* ================= PRIVATE ROUTES ================= */}
+
+          <Route
+            path="/Dashboard"
+            element={
+              <PrivateRoute>
+                <Dashboard />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/TextArea"
+            element={
+              <PrivateRoute>
+                <TextArea />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/Products"
+            element={
+              <PrivateRoute>
+                <Products />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/Home"
+            element={
+              <PrivateRoute>
+                <Home />
+              </PrivateRoute>
+            }
+          />
+
+
+          {/* ================= INVALID ROUTE ================= */}
+
+          <Route
+            path="*"
+            element={<Navigate to="/SignIn" />}
+          />
+
+        </Routes>
+
+      </BrowserRouter>
+
+    </AuthProvider>
   );
 }
 

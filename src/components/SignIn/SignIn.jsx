@@ -10,8 +10,8 @@ import api from "./Api";
 
 export default function Login() {
 
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("admin@gmail.com");
+  const [password, setPassword] = useState("admin");
   const [showPassword, setShowPassword] = useState(false);
 
   const { login } = useAuth();
