@@ -10,8 +10,8 @@ import api from "./Api";
 
 export default function Login() {
 
-  const [username, setUsername] = useState("admin@gmail.com");
-  const [password, setPassword] = useState("admin");
+  const [username, setUsername] = useState();
+  const [password, setPassword] = useState();
   const [showPassword, setShowPassword] = useState(false);
 
   const { login } = useAuth();
@@ -54,12 +54,64 @@ export default function Login() {
 
     } catch (err) {
 
-      console.log(err);
+      console.log("Login Error:", err);
+
+      // Server Not Running / Network Error
+      if (
+        err.code === "ERR_NETWORK" ||
+        err.message === "Network Error"
+      ) {
+
+        // Offline Default Login
+        if (
+          username === "admin@gmail.com" &&
+          password === "admin@123"
+        ) {
+
+          const offlineUser = {
+            id: 1,
+            name: "Admin",
+            email: "admin@gmail.com",
+            role: "Admin",
+          };
+
+          const offlineToken = "offline-token";
+
+          localStorage.setItem(
+            "token",
+            offlineToken
+          );
+
+          localStorage.setItem(
+            "user",
+            JSON.stringify(offlineUser)
+          );
+
+          login(offlineToken);
+
+          alert("Offline Login Successful");
+
+          navigate("/Dashboard");
+
+        } else {
+
+          alert(
+            "Server unavailable. Invalid offline credentials.use Offline Credentials username-admin@gmail.com pass - admin@123"
+          );
+
+        }
+
+        return;
+      }
 
       if (err.response?.data?.message) {
+
         alert(err.response.data.message);
+
       } else {
+
         alert("Invalid Email or Password");
+
       }
     }
   };
@@ -69,7 +121,6 @@ export default function Login() {
 
       <div style={styles.card}>
 
-        {/* Heading */}
         <h1 style={styles.hello}>Hello there,</h1>
 
         <h2 style={styles.welcome}>Welcome!</h2>
