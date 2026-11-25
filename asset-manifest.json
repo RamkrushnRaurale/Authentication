@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/Authentication/static/css/main.029021f5.css",
-    "main.js": "/Authentication/static/js/main.23a19db1.js",
+    "main.css": "/Authentication/static/css/main.d131bcaf.css",
+    "main.js": "/Authentication/static/js/main.86bca382.js",
     "static/js/453.96453769.chunk.js": "/Authentication/static/js/453.96453769.chunk.js",
     "static/media/bootstrap-icons.woff?": "/Authentication/static/media/bootstrap-icons.1295669cd4e305c97f2c.woff",
     "static/media/bootstrap-icons.woff2?": "/Authentication/static/media/bootstrap-icons.92ea18a81d737146ff04.woff2",
@@ -9,18 +9,16 @@
     "static/media/instagram.png": "/Authentication/static/media/instagram.2d5cedd576ca1a740d7c.png",
     "static/media/whatsapp.png": "/Authentication/static/media/whatsapp.02736a253111ffdfca0c.png",
     "static/media/ShppingCart.png": "/Authentication/static/media/ShppingCart.70a79d1c5ca8a1c2a08e.png",
-    "static/media/circleHome.png": "/Authentication/static/media/circleHome.a80ad4658b98cece0f27.png",
     "static/media/eye-off.png": "/Authentication/static/media/eye-off.389646d09b66b5d28159.png",
     "static/media/MailIcon.png": "/Authentication/static/media/MailIcon.e8779962fbb49839e811.png",
     "static/media/twitter.png": "/Authentication/static/media/twitter.894988327f8d68209e91.png",
-    "static/media/circleContact.jpg": "/Authentication/static/media/circleContact.e375b4d8bd564373443b.jpg",
     "index.html": "/Authentication/index.html",
-    "main.029021f5.css.map": "/Authentication/static/css/main.029021f5.css.map",
-    "main.23a19db1.js.map": "/Authentication/static/js/main.23a19db1.js.map",
+    "main.d131bcaf.css.map": "/Authentication/static/css/main.d131bcaf.css.map",
+    "main.86bca382.js.map": "/Authentication/static/js/main.86bca382.js.map",
     "453.96453769.chunk.js.map": "/Authentication/static/js/453.96453769.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.029021f5.css",
-    "static/js/main.23a19db1.js"
+    "static/css/main.d131bcaf.css",
+    "static/js/main.86bca382.js"
   ]
 }
