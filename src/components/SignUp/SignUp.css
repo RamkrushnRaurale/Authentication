@@ -1,84 +1,278 @@
+/* ============================================================
+   Auth pages (SignUp / SignIn) — responsive desktop + mobile
+   ============================================================ */
+
+/* ---------- Page wrapper / background ---------- */
+
+.login-body,
+.register-body {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    min-height: 100vh;
+    width: 100%;
+    margin: 0;
+    padding: 16px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ---------- Card ---------- */
+
 .register-main,
 .login-main {
-    width: 320px;
+    width: 100%;
+    max-width: 380px;
     display: flex;
-    position: absolute;
-    left: 35%;
-    flex-flow: column;
-    justify-self: center;
-    padding: 18px;
-    background-color: rgba(253, 254, 254, 0.9);
-    border-radius: 10px;
-    box-shadow: 4px 4px 20px black;
+    flex-direction: column;
+    padding: 24px;
+    box-sizing: border-box;
+    background-color: rgba(253, 254, 254, 0.92);
+    border-radius: 12px;
+    box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.35);
+    position: relative;
+    left: auto;
 }
 
-.errP {
-    align-self: center;
-    color: red !important;
-    margin-top: 10px;
-}
-
-h1 {
-    color: yellowgreen
-}
-
-.register-main p,
-.login-main p {
-    line-height: 6px;
-    font-size: 18px;
-    color: black;
-
-}
+/* ---------- Headings ---------- */
 
 .register-main h1,
 .login-main h1 {
     align-self: center;
+    text-align: center;
+    color: yellowgreen;
+    font-size: 26px;
+    margin: 0 0 18px;
 }
 
-.register-main input,
-.login-main input {
+/* ---------- Labels / helper text ---------- */
+
+.register-main p,
+.login-main p {
+    font-size: 16px;
+    color: #1a1a1a;
+    line-height: 1.4;
+    margin: 10px 0 6px;
+    text-align: left;
+}
+
+/* ---------- Standard Inputs (Name & Email) ---------- */
+
+.register-main input:not(.password-input-field),
+.login-main input:not(.password-input-field) {
+    width: 100%;
+    box-sizing: border-box;
     border: none;
     background-color: lightblue;
     border-radius: 7px;
-    height: 30px;
-
+    height: 40px;
+    padding: 0 12px;
+    font-size: 15px;
+    color: #111;
 }
 
-.register-main input:focus,
-.login-main input:focus {
+.register-main input:not(.password-input-field)::placeholder,
+.login-main input:not(.password-input-field)::placeholder {
+    color: #4a5a63;
+}
+
+.register-main input:not(.password-input-field):focus,
+.login-main input:not(.password-input-field):focus {
     outline: none;
-    border: 1px solid lightblue;
-    box-shadow: none;
+    border: 1px solid #5aa9d6;
+    box-shadow: 0 0 0 3px rgba(90, 169, 214, 0.25);
 }
 
-.register-main button,
-.login-main button {
+/* ---------- Custom Password Field ---------- */
 
-    height: 30px;
+.custom-password-container {
+    display: flex;
+    align-items: center;
+    background-color: #f0f4ff; /* Light blue background from screenshot */
+    border-radius: 8px;
+    height: 44px;
+    padding: 0 12px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.custom-password-container:focus-within {
+    box-shadow: 0 0 0 3px rgba(90, 169, 214, 0.25);
+}
+
+.lock-icon {
+    font-size: 18px;
+    margin-right: 10px;
+    user-select: none;
+}
+
+.password-input-field {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-size: 16px;
+    color: #111;
+    outline: none;
+    height: 100%;
+    padding: 0;
+    letter-spacing: 1px;
+}
+
+.password-input-field::placeholder {
+    color: #888;
+    letter-spacing: normal;
+}
+
+.eye-icon-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    margin-left: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    transition: transform 0.1s ease, opacity 0.2s ease;
+    opacity: 0.8;
+}
+
+.eye-icon-btn:hover {
+    opacity: 1;
+}
+
+.eye-icon-btn:active {
+    transform: scale(0.9);
+}
+
+.eye-icon-btn:focus {
+    outline: none;
+}
+
+/* ---------- Main Submit Button ---------- */
+
+.register-main button:not(.eye-icon-btn),
+.login-main button:not(.eye-icon-btn) {
+    height: 42px;
     width: 100%;
     align-self: center;
     border: none;
     color: white;
     background: rebeccapurple;
-    border-radius: 5px;
-    opacity: .9;
+    border-radius: 7px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    opacity: 0.95;
+    transition: opacity 0.2s ease, transform 0.1s ease;
 }
 
-.register-main button:hover,
-.login-main button:hover {
+.register-main button:not(.eye-icon-btn):hover,
+.login-main button:not(.eye-icon-btn):hover {
     opacity: 1;
 }
 
-.login-body,
-.register-body {
-  
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    min-height: 100vh;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.register-main button:not(.eye-icon-btn):active,
+.login-main button:not(.eye-icon-btn):active {
+    transform: scale(0.98);
+}
+
+.register-main button:not(.eye-icon-btn):disabled,
+.login-main button:not(.eye-icon-btn):disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* ---------- Error message ---------- */
+
+.errP {
+    align-self: center;
+    text-align: center;
+    color: red !important;
+    margin: 6px 0;
+    font-size: 14px;
+}
+
+/* ---------- "Already have an account?" footer ---------- */
+
+.register-main p[style],
+.login-main p[style] {
+    text-align: center;
+    margin-top: 8px;
+    line-height: 1.5;
+}
+
+.register-main a,
+.login-main a {
+    color: rebeccapurple;
+    text-decoration: none;
+}
+
+.register-main a:hover,
+.login-main a:hover {
+    text-decoration: underline;
+}
+
+/* ============================================================
+   Small phones
+   ============================================================ */
+
+@media (max-width: 480px) {
+    .login-body,
+    .register-body {
+        padding: 12px;
+        align-items: flex-start;
+        padding-top: 32px;
+    }
+
+    .register-main,
+    .login-main {
+        max-width: 100%;
+        padding: 20px 18px;
+        border-radius: 10px;
+    }
+
+    .register-main h1,
+    .login-main h1 {
+        font-size: 22px;
+        margin-bottom: 14px;
+    }
+
+    .register-main input:not(.password-input-field),
+    .login-main input:not(.password-input-field) {
+        height: 44px;
+        font-size: 16px;
+    }
+
+    .custom-password-container {
+        height: 48px; 
+    }
+
+    .password-input-field {
+        font-size: 16px;
+    }
+
+    .eye-icon-btn svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .register-main button:not(.eye-icon-btn),
+    .login-main button:not(.eye-icon-btn) {
+        height: 46px;
+    }
+}
+
+/* ============================================================
+   Very short screens (landscape phones)
+   ============================================================ */
+
+@media (max-height: 600px) {
+    .login-body,
+    .register-body {
+        align-items: flex-start;
+        padding-top: 20px;
+    }
 }

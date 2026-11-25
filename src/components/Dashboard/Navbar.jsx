@@ -1,41 +1,81 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import images from "../Assets/Images/images.png"
+import images from "../Assets/Images/images.png"; 
+import "./Navbar.css";
 
-export default function Navbar(props) {
+export default function Navbar() {
+    const [text, setText] = useState("");
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-    const [text, setText] = useState("Search Here");
-
-    function onChangeHandlers(event) {
-        setText(event.target.value);
-    }
+    const handleSearchSubmit = (e) => {
+        e.preventDefault();
+        console.log("Searching for:", text);
+    };
 
     return (
-
         <>
-            <nav style={{ boxShadow: "10px 0 5px grey",width:"83%", background:"white",right:"0",position:"fixed",top:"0",zIndex:"9"}} className="navbar navbar-expand-lg navbar-dark ">
-                <div className="container-fluid">
-                    <Link className="navbar-brand mx-2" to="/"><img style={{
-                        width: "100px",
-                        borderRadius: "5px", boxShadow: "0px 0 5px black"
-                    }} src={images} alt="" /></Link>
-                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <span className="navbar-toggler-icon"></span>
-                    </button>
-                    <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                      
-                        <div style={{position:"absolute",right:"0",width:"50%"}} >
-                            <form className="d-flex">
-                                <input className="form-control me-2" value={text} onChange={onChangeHandlers} type="search" placeholder="Search" aria-label="Search" />
-                                <button className="btn btn-primary " type="submit">Search</button>
-                                <button className="btn mx-5" style={{ right: "0", background: "white", boxShadow: "0px 0 5px grey" }} type='button'><Link aria-current="page" className="text-decoration-none text-dark " to="/SignIn">LogOut</Link></button>
-
-                            </form>
-                        </div>
+            <nav className="custom-navbar">
+                <div className="navbar-container">
+                    
+                    {/* LEFT: Hamburger (Mobile) / Logo (Desktop) */}
+                    <div className="navbar-left">
+                        <button 
+                            className="menu-toggle-btn d-lg-none" 
+                            onClick={() => setIsMenuOpen(!isMenuOpen)}
+                            aria-label="Toggle menu"
+                        >
+                            <i className="bi bi-list"></i>
+                        </button>
+                        
+                        <Link className="navbar-brand d-none d-lg-block" to="/">
+                            <img className="navbar-logo" src={images} alt="logo" />
+                        </Link>
                     </div>
-                </div>
-            </nav>
-        </>
 
-    )
+                    {/* CENTER: Search Bar */}
+                    <div className="navbar-center">
+                        <form className="search-form" onSubmit={handleSearchSubmit}>
+                            <input
+                                className="search-input"
+                                type="search"
+                                placeholder="Search"
+                                value={text}
+                                onChange={(e) => setText(e.target.value)}
+                                aria-label="Search"
+                            />
+                            <button className="search-icon-btn" type="submit">
+                                <i className="bi bi-search"></i>
+                            </button>
+                        </form>
+                    </div>
+
+                    {/* RIGHT: Cart & Logout */}
+                    <div className="navbar-right">
+                        <Link to="/cart" className="cart-icon-wrapper">
+                            <div className="cart-circle">
+                                <i className="bi bi-cart3"></i>
+                            </div>
+                            <span className="cart-badge">6</span>
+                        </Link>
+
+                        <Link to="/SignIn" className="logout-btn">
+                            <span className="d-none d-lg-block px-2">LogOut</span>
+                        </Link>
+                    </div>
+
+                </div>
+
+                {/* MOBILE DROPDOWN MENU */}
+                {isMenuOpen && (
+                    <div className="mobile-menu-dropdown d-lg-none">
+                        <Link to="/" className="mobile-link">Home</Link>
+                        <Link to="/profile" className="mobile-link">Profile</Link>
+                        <Link to="/SignIn" className="mobile-link text-danger">LogOut</Link>
+                    </div>
+                )}
+            </nav>
+
+            <div className="navbar-spacer"></div>
+        </>
+    );
 }

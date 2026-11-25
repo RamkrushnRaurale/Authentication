@@ -1,35 +1,77 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
 
 import MailIcon from "../Assets/Images/MailIcon.png";
+import api from "./Api";
 
 export default function ForgotPassword() {
 
-    const [email, setEmail] = useState("");
-    const [message, setMessage] = useState("");
+    const [email, setEmail] =
+        useState("");
+
+    const [message, setMessage] =
+        useState("");
+
+    const [loading, setLoading] =
+        useState(false);
 
     const handleSubmit = async (e) => {
 
         e.preventDefault();
 
-        try {
+        if (!email.trim()) {
 
-            const response = await axios.post(
-                "http://localhost:5000/forgot-password",
-                { email }
+            setMessage(
+                "Email is required"
             );
 
-            setMessage(response.data.message);
+            return;
+        }
+
+        const emailPattern =
+            /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (
+            !emailPattern.test(email)
+        ) {
+
+            setMessage(
+                "Please enter a valid email"
+            );
+
+            return;
+        }
+
+        try {
+
+            setLoading(true);
+
+            const response =
+                await api.post(
+                    "/forgot-password",
+                    { email }
+                );
+
+            setMessage(
+                response.data.message
+            );
+
+            setEmail("");
 
         } catch (error) {
 
             console.log(error);
 
             setMessage(
-                error.response?.data?.message ||
+                error.response?.data
+                    ?.message ||
                 "Something went wrong"
             );
+
+        } finally {
+
+            setLoading(false);
+
         }
     };
 
@@ -44,19 +86,35 @@ export default function ForgotPassword() {
                 </h1>
 
                 <p style={styles.text}>
-                    Enter your email address to reset password
+                    Enter your email address
+                    to receive a password
+                    reset link
                 </p>
 
-                <form onSubmit={handleSubmit}>
+                <form
+                    onSubmit={
+                        handleSubmit
+                    }
+                >
 
-                    <div style={styles.inputBox}>
+                    <div
+                        style={
+                            styles.inputBox
+                        }
+                    >
 
-                        <span style={styles.icon}>
+                        <span
+                            style={
+                                styles.icon
+                            }
+                        >
 
                             <img
                                 src={MailIcon}
                                 alt="mail"
-                                style={styles.inputIcon}
+                                style={
+                                    styles.inputIcon
+                                }
                             />
 
                         </span>
@@ -66,34 +124,62 @@ export default function ForgotPassword() {
                             placeholder="Enter Email"
                             value={email}
                             onChange={(e) =>
-                                setEmail(e.target.value)
+                                setEmail(
+                                    e.target
+                                        .value
+                                )
                             }
-                            style={styles.input}
+                            style={
+                                styles.input
+                            }
                         />
 
                     </div>
 
                     <button
                         type="submit"
-                        style={styles.button}
+                        style={
+                            styles.button
+                        }
+                        disabled={
+                            loading
+                        }
                     >
-                        Send Reset Link
+                        {
+                            loading
+                                ? "Sending..."
+                                : "Send Reset Link"
+                        }
                     </button>
 
                 </form>
 
                 {
-                    message &&
-                    <p style={styles.message}>
-                        {message}
-                    </p>
+                    message && (
+
+                        <p
+                            style={
+                                styles.message
+                            }
+                        >
+                            {message}
+                        </p>
+
+                    )
                 }
 
-                <div style={{ marginTop: "20px" }}>
+                <div
+                    style={{
+                        marginTop:
+                            "20px",
+                    }}
+                >
 
                     <Link
                         to="/SignIn"
-                        style={styles.back}
+                        style={
+                            styles.back
+                        }
                     >
                         ← Back To Login
                     </Link>
@@ -122,7 +208,8 @@ const styles = {
         background: "#fff",
         padding: "30px",
         borderRadius: "10px",
-        boxShadow: "0 5px 15px rgba(0,0,0,0.1)",
+        boxShadow:
+            "0 5px 15px rgba(0,0,0,0.1)",
         textAlign: "center",
     },
 
@@ -178,6 +265,8 @@ const styles = {
     message: {
         marginTop: "15px",
         fontSize: "14px",
+        color: "#28a745",
+        fontWeight: "bold",
     },
 
     back: {

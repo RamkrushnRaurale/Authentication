@@ -91,7 +91,7 @@ function Footer() {
                     <div className="row mt-lg-7 mt-5">
                         <div className="col-lg-6 offset-lg-3 col-12 text-center">
                             <span>
-                                © {new Date().getFullYear()} Geeks-UI Mentor. All Rights Reserved.
+                                © {new Date().getFullYear()} . All Rights Reserved.
                             </span>
                         </div>
                     </div>

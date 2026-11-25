@@ -1,49 +1,111 @@
 import React, { useState } from "react";
-import axios from "axios";
 import {
     useParams,
-    useNavigate
+    useNavigate,
 } from "react-router-dom";
+
+import api from "./Api";
 
 export default function ResetPassword() {
 
-    const { token } = useParams();
+    const { token } =
+        useParams();
 
-    const navigate = useNavigate();
+    const navigate =
+        useNavigate();
 
-    const [password, setPassword] = useState("");
+    const [password, setPassword] =
+        useState("");
 
-    const [message, setMessage] = useState("");
+    const [confirmPassword,
+        setConfirmPassword] =
+        useState("");
 
-    const handleSubmit = async (e) => {
+    const [message, setMessage] =
+        useState("");
 
-        e.preventDefault();
+    const [loading, setLoading] =
+        useState(false);
 
-        try {
+    const handleSubmit =
+        async (e) => {
 
-            const response = await axios.post(
-                `http://localhost:5000/reset-password/${token}`,
-                { password }
-            );
+            e.preventDefault();
 
-            setMessage(response.data.message);
+            if (
+                !password ||
+                !confirmPassword
+            ) {
 
-            setTimeout(() => {
+                setMessage(
+                    "All fields are required"
+                );
 
-                navigate("/SignIn");
+                return;
+            }
 
-            }, 2000);
+            if (
+                password.length < 8
+            ) {
 
-        } catch (error) {
+                setMessage(
+                    "Password must be at least 8 characters"
+                );
 
-            console.log(error);
+                return;
+            }
 
-            setMessage(
-                error.response?.data?.message ||
-                "Something went wrong"
-            );
-        }
-    };
+            if (
+                password !==
+                confirmPassword
+            ) {
+
+                setMessage(
+                    "Passwords do not match"
+                );
+
+                return;
+            }
+
+            try {
+
+                setLoading(true);
+
+                const response =
+                    await api.post(
+                        `/reset-password/${token}`,
+                        {
+                            password,
+                        }
+                    );
+
+                setMessage(
+                    response.data.message
+                );
+
+                setTimeout(() => {
+
+                    navigate(
+                        "/SignIn"
+                    );
+
+                }, 2000);
+
+            } catch (error) {
+
+                console.log(error);
+
+                setMessage(
+                    error.response?.data?.message ||
+                    "Something went wrong"
+                );
+
+            } finally {
+
+                setLoading(false);
+
+            }
+        };
 
     return (
 
@@ -55,14 +117,32 @@ export default function ResetPassword() {
                     Reset Password
                 </h2>
 
-                <form onSubmit={handleSubmit}>
+                <form
+                    onSubmit={
+                        handleSubmit
+                    }
+                >
 
                     <input
                         type="password"
                         placeholder="Enter New Password"
                         value={password}
                         onChange={(e) =>
-                            setPassword(e.target.value)
+                            setPassword(
+                                e.target.value
+                            )
+                        }
+                        style={styles.input}
+                    />
+
+                    <input
+                        type="password"
+                        placeholder="Confirm Password"
+                        value={confirmPassword}
+                        onChange={(e) =>
+                            setConfirmPassword(
+                                e.target.value
+                            )
                         }
                         style={styles.input}
                     />
@@ -70,14 +150,20 @@ export default function ResetPassword() {
                     <button
                         type="submit"
                         style={styles.button}
+                        disabled={loading}
                     >
-                        Reset Password
+                        {
+                            loading
+                                ? "Updating..."
+                                : "Reset Password"
+                        }
                     </button>
 
                 </form>
 
                 {
                     message &&
+
                     <p style={styles.message}>
                         {message}
                     </p>
@@ -104,7 +190,8 @@ const styles = {
         background: "#fff",
         padding: "30px",
         borderRadius: "10px",
-        boxShadow: "0 5px 15px rgba(0,0,0,0.1)",
+        boxShadow:
+            "0 5px 15px rgba(0,0,0,0.1)",
         textAlign: "center",
     },
 
@@ -116,10 +203,11 @@ const styles = {
     input: {
         width: "100%",
         padding: "12px",
-        marginBottom: "20px",
+        marginBottom: "15px",
         borderRadius: "5px",
         border: "1px solid #ccc",
         outline: "none",
+        boxSizing: "border-box",
     },
 
     button: {
@@ -135,5 +223,7 @@ const styles = {
 
     message: {
         marginTop: "15px",
+        color: "#28a745",
+        fontWeight: "bold",
     },
 };

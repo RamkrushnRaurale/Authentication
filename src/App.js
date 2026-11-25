@@ -23,20 +23,46 @@ import {
   useAuth,
 } from "./components/SignIn/AuthContext";
 
+/* ================= PRIVATE ROUTE ================= */
 
-// ================= PRIVATE ROUTE =================
+const PrivateRoute = ({
+  children,
+}) => {
 
-const PrivateRoute = ({ children }) => {
+  const {
+    user,
+    loading,
+  } = useAuth();
 
-  const { user } = useAuth();
+  if (loading) {
+
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+          fontSize: "20px",
+          fontWeight: "bold",
+        }}
+      >
+        Loading...
+      </div>
+    );
+  }
 
   return user
     ? children
-    : <Navigate to="/SignIn" />;
+    : (
+      <Navigate
+        to="/SignIn"
+        replace
+      />
+    );
 };
 
-
-// ================= APP =================
+/* ================= APP ================= */
 
 function App() {
 
@@ -48,33 +74,47 @@ function App() {
 
         <Routes>
 
-          {/* ================= PUBLIC ROUTES ================= */}
+          {/* ================= DEFAULT ================= */}
 
           <Route
             path="/"
-            element={<Navigate to="/SignIn" />}
+            element={
+              <Navigate
+                to="/SignIn"
+                replace
+              />
+            }
           />
+
+          {/* ================= PUBLIC ROUTES ================= */}
 
           <Route
             path="/SignIn"
-            element={<SignIn />}
+            element={
+              <SignIn />
+            }
           />
 
           <Route
             path="/SignUp"
-            element={<SignUp />}
+            element={
+              <SignUp />
+            }
           />
 
           <Route
             path="/ForgotPassword"
-            element={<ForgotPassword />}
+            element={
+              <ForgotPassword />
+            }
           />
 
           <Route
             path="/reset-password/:token"
-            element={<ResetPassword />}
+            element={
+              <ResetPassword />
+            }
           />
-
 
           {/* ================= PRIVATE ROUTES ================= */}
 
@@ -114,12 +154,16 @@ function App() {
             }
           />
 
-
           {/* ================= INVALID ROUTE ================= */}
 
           <Route
             path="*"
-            element={<Navigate to="/SignIn" />}
+            element={
+              <Navigate
+                to="/SignIn"
+                replace
+              />
+            }
           />
 
         </Routes>

@@ -9,7 +9,6 @@ function Dashboard(props) {
 
     <div>
       <SideBar />
-   
     </div>
   )
 }
