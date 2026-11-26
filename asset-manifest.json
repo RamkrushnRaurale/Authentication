@@ -1,24 +1,23 @@
 {
   "files": {
-    "main.css": "/Authentication/static/css/main.d131bcaf.css",
-    "main.js": "/Authentication/static/js/main.86bca382.js",
+    "main.css": "/Authentication/static/css/main.7baf656b.css",
+    "main.js": "/Authentication/static/js/main.277d6109.js",
     "static/js/453.96453769.chunk.js": "/Authentication/static/js/453.96453769.chunk.js",
     "static/media/bootstrap-icons.woff?": "/Authentication/static/media/bootstrap-icons.1295669cd4e305c97f2c.woff",
     "static/media/bootstrap-icons.woff2?": "/Authentication/static/media/bootstrap-icons.92ea18a81d737146ff04.woff2",
     "static/media/eye.png": "/Authentication/static/media/eye.42499a65aae2cc1f6875.png",
     "static/media/instagram.png": "/Authentication/static/media/instagram.2d5cedd576ca1a740d7c.png",
     "static/media/whatsapp.png": "/Authentication/static/media/whatsapp.02736a253111ffdfca0c.png",
-    "static/media/ShppingCart.png": "/Authentication/static/media/ShppingCart.70a79d1c5ca8a1c2a08e.png",
     "static/media/eye-off.png": "/Authentication/static/media/eye-off.389646d09b66b5d28159.png",
     "static/media/MailIcon.png": "/Authentication/static/media/MailIcon.e8779962fbb49839e811.png",
     "static/media/twitter.png": "/Authentication/static/media/twitter.894988327f8d68209e91.png",
     "index.html": "/Authentication/index.html",
-    "main.d131bcaf.css.map": "/Authentication/static/css/main.d131bcaf.css.map",
-    "main.86bca382.js.map": "/Authentication/static/js/main.86bca382.js.map",
+    "main.7baf656b.css.map": "/Authentication/static/css/main.7baf656b.css.map",
+    "main.277d6109.js.map": "/Authentication/static/js/main.277d6109.js.map",
     "453.96453769.chunk.js.map": "/Authentication/static/js/453.96453769.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.d131bcaf.css",
-    "static/js/main.86bca382.js"
+    "static/css/main.7baf656b.css",
+    "static/js/main.277d6109.js"
   ]
 }
