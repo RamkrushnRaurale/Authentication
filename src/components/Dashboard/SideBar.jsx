@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 
 import LogoImg from "../Assets/Images/images.png";
 import searchImg from "../Assets/Images/search.jpg";
-import cartimg from "../Assets/Images/ShppingCart.png";
 
 import "./SideBar.css";
 
@@ -25,12 +24,12 @@ function SideBar() {
     const [collapsed, setCollapsed] = useState(false);
     // Sidebar (mobile drawer open/close)
     const [mobileOpen, setMobileOpen] = useState(false);
-    // Cart Popup
+    // Inline Cart Page toggle
     const [showCart, setShowCart] = useState(false);
     // Profile Dropdown Menu
     const [showProfileMenu, setShowProfileMenu] = useState(false);
 
-    // Close mobile drawer on route change / resize to desktop
+    // Close mobile drawer on resize to desktop
     useEffect(() => {
         const onResize = () => {
             if (window.innerWidth > 768) setMobileOpen(false);
@@ -48,7 +47,6 @@ function SideBar() {
     }, [mobileOpen]);
 
     const handleToggleSidebar = () => {
-        // On mobile → toggle drawer. On desktop → toggle collapse.
         if (window.innerWidth <= 768) {
             setMobileOpen((prev) => !prev);
         } else {
@@ -63,7 +61,7 @@ function SideBar() {
         navigate("/SignIn");
     };
 
-    // Totals
+    // ----- Totals -----
     const count = useMemo(
         () => carts.reduce((acc, curr) => acc + curr.quantity, 0),
         [carts]
@@ -174,12 +172,11 @@ function SideBar() {
                             </div>
                         </div>
 
-                        {/* Cart */}
-
+                        {/* Cart Icon */}
                         <div className="cart-wrap">
                             <button
                                 className="cart-button"
-                                onClick={() => setShowCart(!showCart)}
+                                onClick={() => setShowCart((prev) => !prev)}
                                 aria-label="Cart"
                             >
                                 <i className="fas fa-shopping-cart"></i>
@@ -187,9 +184,8 @@ function SideBar() {
                             {count > 0 && <span className="msg">{count}</span>}
                         </div>
 
-                        {/* ===== UPDATED LOGOUT DROPDOWN ===== */}
+                        {/* Profile Dropdown */}
                         <div className="profile-menu-container">
-                            {/* Trigger Button (Red Circle) */}
                             <div
                                 className="profile-trigger"
                                 onClick={() => setShowProfileMenu(!showProfileMenu)}
@@ -197,10 +193,13 @@ function SideBar() {
                                 <div className="avatar-circle">
                                     <i className="fas fa-user"></i>
                                 </div>
-                                <span className={`arrow ${showProfileMenu ? 'open' : ''}`}>^</span>
+                                <span
+                                    className={`arrow ${showProfileMenu ? "open" : ""}`}
+                                >
+                                    ^
+                                </span>
                             </div>
 
-                            {/* Dropdown Menu */}
                             {showProfileMenu && (
                                 <div className="dropdown-menu-custom">
                                     <ul className="menu-list">
@@ -217,7 +216,6 @@ function SideBar() {
 
                                     <hr className="divider" />
 
-                                    {/* THE ACTUAL LOGOUT BUTTON */}
                                     <button
                                         className="logout-action"
                                         onClick={handleLogout}
@@ -228,105 +226,221 @@ function SideBar() {
                                 </div>
                             )}
                         </div>
-                        {/* ===== END LOGOUT DROPDOWN ===== */}
-
                     </div>
                 </nav>
 
-                {/* Cart Popup */}
-                {showCart && (
-                    <div className="cart-container">
-                        <div className="cart-header">
-                            <h2>My Cart</h2>
-                            <button
-                                className="cart-close"
-                                onClick={() => setShowCart(false)}
-                                aria-label="Close cart"
-                            >
-                                ×
-                            </button>
-                        </div>
+                {/* ================= CONTENT ================= */}
+                <div className="content-area">
+                    {showCart ? (
+                        /* ===== INLINE CART PAGE ===== */
+                        <div className="cart-page">
+                            <div className="cart-page-header">
+                                <h2>
+                                    My Cart ({count} {count === 1 ? "item" : "items"})
+                                </h2>
+                                <button
+                                    className="cart-back-btn"
+                                    onClick={() => setShowCart(false)}
+                                >
+                                    <i className="fas fa-arrow-left"></i> Continue Shopping
+                                </button>
+                            </div>
 
-                        {carts.length === 0 ? (
-                            <p>Cart Empty</p>
-                        ) : (
-                            <>
-                                {carts.map((item) => (
-                                    <div className="cart-item" key={item.productId}>
-                                        <img src={item.thumbnail} alt="" />
-                                        <div className="cart-info">
-                                            <h4>{item.title}</h4>
-                                            <p>₹ {item.price}</p>
-                                            <div className="qty-box">
-                                                <button
-                                                    onClick={() =>
-                                                        dispatch(
-                                                            decreamentCart({
-                                                                productId: item.productId,
-                                                                quantity: 1,
-                                                            })
-                                                        )
-                                                    }
-                                                >
-                                                    -
-                                                </button>
-                                                <span>{item.quantity}</span>
-                                                <button
-                                                    onClick={() =>
-                                                        dispatch(
-                                                            increamentCart({
-                                                                productId: item.productId,
-                                                                quantity: 1,
-                                                                title: item.title,
-                                                                price: item.price,
-                                                                thumbnail: item.thumbnail,
-                                                            })
-                                                        )
-                                                    }
-                                                >
-                                                    +
-                                                </button>
+                            {carts.length === 0 ? (
+                                <div className="cart-empty-state">
+                                    <i className="fas fa-shopping-cart"></i>
+                                    <h3>Your cart is empty</h3>
+                                    <p>Add items to it now.</p>
+                                    <button
+                                        className="shop-now-btn"
+                                        onClick={() => setShowCart(false)}
+                                    >
+                                        Shop Now
+                                    </button>
+                                </div>
+                            ) : (
+                                <div className="cart-page-layout">
+                                    {/* LEFT: Cart Items */}
+                                    <div className="cart-items-column">
+                                        {carts.map((item) => (
+                                            <div
+                                                className="cart-item-card"
+                                                key={item.productId}
+                                            >
+                                                <img
+                                                    src={item.thumbnail}
+                                                    alt={item.title}
+                                                    className="cart-item-img"
+                                                />
+                                                <div className="cart-item-details">
+                                                    <h4 className="cart-item-title">
+                                                        {item.title}
+                                                    </h4>
+                                                    <p className="cart-item-seller">
+                                                        Seller: CodeRama Retail
+                                                    </p>
+                                                    <div className="cart-item-price-row">
+                                                        <span className="cart-item-price">
+                                                            ₹
+                                                            {item.price.toLocaleString(
+                                                                "en-IN"
+                                                            )}
+                                                        </span>
+                                                        <span className="cart-item-mrp">
+                                                            ₹
+                                                            {Math.floor(
+                                                                item.price * 1.25
+                                                            ).toLocaleString("en-IN")}
+                                                        </span>
+                                                        <span className="cart-item-discount">
+                                                            20% off
+                                                        </span>
+                                                    </div>
+                                                    <p className="cart-item-delivery">
+                                                        <i className="fas fa-truck"></i>{" "}
+                                                        Delivery by{" "}
+                                                        {new Date(
+                                                            Date.now() + 3 * 86400000
+                                                        ).toLocaleDateString("en-IN", {
+                                                            weekday: "short",
+                                                            day: "numeric",
+                                                            month: "short",
+                                                        })}
+                                                    </p>
+                                                    <div className="cart-item-actions">
+                                                        <div className="qty-box">
+                                                            <button
+                                                                onClick={() =>
+                                                                    dispatch(
+                                                                        decreamentCart({
+                                                                            productId:
+                                                                                item.productId,
+                                                                            quantity: 1,
+                                                                        })
+                                                                    )
+                                                                }
+                                                            >
+                                                                −
+                                                            </button>
+                                                            <span>{item.quantity}</span>
+                                                            <button
+                                                                onClick={() =>
+                                                                    dispatch(
+                                                                        increamentCart({
+                                                                            productId:
+                                                                                item.productId,
+                                                                            quantity: 1,
+                                                                            title: item.title,
+                                                                            price: item.price,
+                                                                            thumbnail:
+                                                                                item.thumbnail,
+                                                                        })
+                                                                    )
+                                                                }
+                                                            >
+                                                                +
+                                                            </button>
+                                                        </div>
+                                                        <button
+                                                            className="remove-btn"
+                                                            onClick={() =>
+                                                                dispatch(
+                                                                    decreamentCart({
+                                                                        productId:
+                                                                            item.productId,
+                                                                        quantity:
+                                                                            item.quantity,
+                                                                    })
+                                                                )
+                                                            }
+                                                        >
+                                                            <i className="far fa-trash-alt"></i>{" "}
+                                                            Remove
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div className="cart-item-subtotal">
+                                                    ₹
+                                                    {(
+                                                        item.price * item.quantity
+                                                    ).toLocaleString("en-IN")}
+                                                </div>
                                             </div>
+                                        ))}
+
+                                        {/* Sticky checkout bar (mobile only) */}
+                                        <div className="cart-checkout-sticky">
+                                            <div className="sticky-total">
+                                                <span>Total</span>
+                                                <strong>
+                                                    ₹
+                                                    {finalAmount.toLocaleString("en-IN")}
+                                                </strong>
+                                            </div>
+                                            <button className="place-order-btn">
+                                                Place Order
+                                            </button>
                                         </div>
                                     </div>
-                                ))}
 
-                                <div className="price-details">
-                                    <h3>Price Details</h3>
-                                    <div className="price-row">
-                                        <span>Price ({count} items)</span>
-                                        <span>₹ {totalPrice}</span>
-                                    </div>
-                                    <div className="price-row green">
-                                        <span>Discount</span>
-                                        <span>- ₹ {discount}</span>
-                                    </div>
-                                    <div className="price-row">
-                                        <span>Platform Fee</span>
-                                        <span>₹ {platformFee}</span>
-                                    </div>
-                                    <hr />
-                                    <div className="price-row total">
-                                        <span>Total Amount</span>
-                                        <span>₹ {finalAmount}</span>
-                                    </div>
-                                    <div className="save-box">
-                                        🎉 You'll save ₹{discount - platformFee} on this
-                                        order!
-                                    </div>
+                                    {/* RIGHT: Price Details */}
+                                    <aside className="price-details-card">
+                                        <h3 className="price-details-title">
+                                            PRICE DETAILS
+                                        </h3>
+                                        <div className="price-row">
+                                            <span>Price ({count} items)</span>
+                                            <span>
+                                                ₹{totalPrice.toLocaleString("en-IN")}
+                                            </span>
+                                        </div>
+                                        <div className="price-row green">
+                                            <span>Discount</span>
+                                            <span>
+                                                − ₹{discount.toLocaleString("en-IN")}
+                                            </span>
+                                        </div>
+                                        <div className="price-row">
+                                            <span>Platform Fee</span>
+                                            <span>₹{platformFee}</span>
+                                        </div>
+                                        <div className="price-row">
+                                            <span>Delivery Charges</span>
+                                            <span className="free">FREE</span>
+                                        </div>
+                                        <hr />
+                                        <div className="price-row total">
+                                            <span>Total Amount</span>
+                                            <span>
+                                                ₹{finalAmount.toLocaleString("en-IN")}
+                                            </span>
+                                        </div>
+                                        <div className="save-box">
+                                            🎉 You will save ₹
+                                            {(discount - platformFee).toLocaleString(
+                                                "en-IN"
+                                            )}{" "}
+                                            on this order
+                                        </div>
+                                        <button className="place-order-btn desktop-only">
+                                            Place Order
+                                        </button>
+                                        <div className="trust-badge">
+                                            <i className="fas fa-shield-alt"></i> Safe and
+                                            Secure Payments
+                                        </div>
+                                    </aside>
                                 </div>
-                            </>
-                        )}
-                    </div>
-                )}
-
-                {/* Content */}
-                <div className="content-area">
-                    <div className="scroll-area">
-                        <Slider />
-                        <Products />
-                        <Footer />
-                    </div>
+                            )}
+                        </div>
+                    ) : (
+                        /* ===== DEFAULT CONTENT ===== */
+                        <div className="scroll-area">
+                            <Slider />
+                            <Products />
+                            <Footer />
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

@@ -339,9 +339,9 @@ const styles = {
     right: 0,
     bottom: 0,
     border: "5px solid transparent", // Make base transparent
-    borderTop: "5px solid #ff0000", // Red
+    borderTop:"5px solid #4b0082", // Red
     borderRight: "5px solid #ffa500", // Orange
-    borderBottom: "5px solid #ffff00", // Yellow
+    borderBottom: "5px solid #ee82ee", // Yellow
     borderLeft: "5px solid #00ff00", // Green
     borderRadius: "50%",
     animation: "spin 0.9s linear infinite",
@@ -359,7 +359,7 @@ const styles = {
     borderTop: "4px solid #0000ff", // Blue
     borderRight: "4px solid #4b0082", // Indigo
     borderBottom: "4px solid #ee82ee", // Violet
-    borderLeft: "4px solid #ff0000", // Red
+    borderLeft: "4px solid #4b0082", // Red
     borderRadius: "50%",
     animation: "spin-reverse 1.2s linear infinite",
     boxShadow: "0 0 10px rgba(0, 0, 255, 0.5)", // Blue glow
@@ -371,7 +371,7 @@ const styles = {
     fontSize: "16px",
     fontWeight: "700",
     // Rainbow Gradient Text
-    background: "linear-gradient(90deg, #ff0000, #ffa500, #ffff00, #00ff00, #0000ff, #4b0082, #ee82ee)",
+    background: "linear-gradient(90deg,  #0000ff, #4b0082, #ee82ee)",
     WebkitBackgroundClip: "text",
     WebkitTextFillColor: "transparent",
     fontFamily: "Arial",
@@ -381,7 +381,7 @@ const styles = {
     margin: "4px 0 0 0",
     letterSpacing: "4px",
     // Rainbow Gradient Dots
-    background: "linear-gradient(90deg,  #0000ff, #4b0082, #ee82ee)",
+    background: "linear-gradient(90deg, #ff0000, #ffa500, #ffff00,  #0000ff, #4b0082, #ee82ee)",
     WebkitBackgroundClip: "text",
     WebkitTextFillColor: "transparent",
     fontSize: "20px",
