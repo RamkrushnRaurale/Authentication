@@ -1,23 +1,23 @@
 {
   "files": {
-    "main.css": "/Authentication/static/css/main.7baf656b.css",
-    "main.js": "/Authentication/static/js/main.277d6109.js",
-    "static/js/453.96453769.chunk.js": "/Authentication/static/js/453.96453769.chunk.js",
-    "static/media/bootstrap-icons.woff?": "/Authentication/static/media/bootstrap-icons.1295669cd4e305c97f2c.woff",
-    "static/media/bootstrap-icons.woff2?": "/Authentication/static/media/bootstrap-icons.92ea18a81d737146ff04.woff2",
-    "static/media/eye.png": "/Authentication/static/media/eye.42499a65aae2cc1f6875.png",
-    "static/media/instagram.png": "/Authentication/static/media/instagram.2d5cedd576ca1a740d7c.png",
-    "static/media/whatsapp.png": "/Authentication/static/media/whatsapp.02736a253111ffdfca0c.png",
-    "static/media/eye-off.png": "/Authentication/static/media/eye-off.389646d09b66b5d28159.png",
-    "static/media/MailIcon.png": "/Authentication/static/media/MailIcon.e8779962fbb49839e811.png",
-    "static/media/twitter.png": "/Authentication/static/media/twitter.894988327f8d68209e91.png",
-    "index.html": "/Authentication/index.html",
-    "main.7baf656b.css.map": "/Authentication/static/css/main.7baf656b.css.map",
-    "main.277d6109.js.map": "/Authentication/static/js/main.277d6109.js.map",
-    "453.96453769.chunk.js.map": "/Authentication/static/js/453.96453769.chunk.js.map"
+    "main.css": "/static/css/main.6aff8a90.css",
+    "main.js": "/static/js/main.259d5b6a.js",
+    "static/js/453.8994af9a.chunk.js": "/static/js/453.8994af9a.chunk.js",
+    "static/media/bootstrap-icons.woff?": "/static/media/bootstrap-icons.7f1b72aed11d638e7d5a.woff",
+    "static/media/bootstrap-icons.woff2?": "/static/media/bootstrap-icons.78be1a7fd85891ea64a5.woff2",
+    "static/media/eye.png": "/static/media/eye.42499a65aae2cc1f6875.png",
+    "static/media/instagram.png": "/static/media/instagram.2d5cedd576ca1a740d7c.png",
+    "static/media/whatsapp.png": "/static/media/whatsapp.02736a253111ffdfca0c.png",
+    "static/media/eye-off.png": "/static/media/eye-off.389646d09b66b5d28159.png",
+    "static/media/MailIcon.png": "/static/media/MailIcon.e8779962fbb49839e811.png",
+    "static/media/twitter.png": "/static/media/twitter.894988327f8d68209e91.png",
+    "index.html": "/index.html",
+    "main.6aff8a90.css.map": "/static/css/main.6aff8a90.css.map",
+    "main.259d5b6a.js.map": "/static/js/main.259d5b6a.js.map",
+    "453.8994af9a.chunk.js.map": "/static/js/453.8994af9a.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.7baf656b.css",
-    "static/js/main.277d6109.js"
+    "static/css/main.6aff8a90.css",
+    "static/js/main.259d5b6a.js"
   ]
 }
